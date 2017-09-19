@@ -45,15 +45,11 @@ class State:
         return self.getCoord(x,y) == '%'
     def getTransitions(self):
         moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
-        print(moves)
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
 
 m1 = State("mediumMaze.txt")
 print(m1)
-print(m1.location)
-print(m1.targets)
-print(m1.getTransitions())
-print(m1.getCoord((20,1)))
-print(''.join(m1.map[20]))
-print(m1.map[20][1])            
+print("Current Location: " + str(m1.location))
+print("Target Locations: " +str(m1.targets))
+print("Valid moves: " + str(m1.getTransitions()))
             
