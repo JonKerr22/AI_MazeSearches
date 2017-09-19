@@ -44,8 +44,16 @@ class State:
     def isWall(self, x, y):
         return self.getCoord(x,y) == '%'
     def getTransitions(self):
-        moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
+        return getTransitions(self,self.location[0],self.location[1])
+    def getTransitions(self, x, y):
+    	moves = [add_tuples((x,y), move) for move in POSSIBLE_MOVES]
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+class Node:
+	def __init__(self, coordinates, state):
+		self.x = coordinates[0]
+		self.y = coordinates[1]
+		self.visited = False
+		self.neighbors = state.getTransitions(x, y)
 
 m1 = State("mediumMaze.txt")
 print(m1)
