@@ -18,7 +18,13 @@ def accepts_tuple_arg(func):
     def wrapper(*args, **kwargs):
         #args = map(lambda arg: (arg[0],arg[1] if isinstance(arg,tuple) else arg), args)
         #placeholder while I work on this
-        return func(*args, **kwargs)
+        temp = []
+        for arg in args:
+            if isinstance(arg,tuple):
+                temp += [coord for coord in arg]
+            else:
+                temp.append(arg)
+        return func(*temp, **kwargs)
     return wrapper
 def add_tuples(a,b):
     return tuple([sum(x) for x in zip(a,b)])
@@ -46,10 +52,15 @@ class State:
     def getTransitions(self):
         moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
-
+    def move(self, x, y):
+        ### Needs to be expanded
+        
+        self.location = (x,y)
 m1 = State("mediumMaze.txt")
 print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
             
+print(m1.getCoord(0,0))
+print(m1.getCoord((0,0)))
