@@ -12,3 +12,48 @@
 #transitions, are just moving 1 either up down left or right, count # of steps
 # for part 2 at least, we need to remove visited targets
 # keep a set of what we've vistited 
+
+POSSIBLE_MOVES = [(-1,0),(1,0),(0,-1),(0,1)]
+def accepts_tuple_arg(func):
+    def wrapper(*args, **kwargs):
+        #args = map(lambda arg: (arg[0],arg[1] if isinstance(arg,tuple) else arg), args)
+        #placeholder while I work on this
+        return func(*args, **kwargs)
+    return wrapper
+def add_tuples(a,b):
+    return tuple([sum(x) for x in zip(a,b)])
+class State:
+    def __init__(self, filepath):
+        self.map = []
+        self.location = (-1,-1)
+        self.targets = []
+        textFile = open(filepath)
+        lines = textFile.readlines()
+        for i, line in enumerate(lines):
+            j = line.find('P')
+            if j != -1:
+                self.location = (j, i)
+            line = list(line)
+            self.map.append(line)
+            self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
+    def __str__(self):
+        return ''.join([''.join(row) for row in self.map])
+    @accepts_tuple_arg
+    def getCoord(self, x, y):
+        return self.map[y][x]
+    def isWall(self, x, y):
+        return self.getCoord(x,y) == '%'
+    def getTransitions(self):
+        moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
+        print(moves)
+        return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+
+m1 = State("mediumMaze.txt")
+print(m1)
+print(m1.location)
+print(m1.targets)
+print(m1.getTransitions())
+print(m1.getCoord((20,1)))
+print(''.join(m1.map[20]))
+print(m1.map[20][1])            
+            
