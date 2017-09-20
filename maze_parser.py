@@ -49,13 +49,23 @@ class State:
         return self.map[y][x]
     def isWall(self, x, y):
         return self.getCoord(x,y) == '%'
-    def getTransitions(self):
-        moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
-        return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
-    def move(self, x, y):
-        ### Needs to be expanded
+    def getTransitions(self, *args):
+    	if len(args) == 2:
+    		moves = [add_tuples((x,y), move) for move in POSSIBLE_MOVES]
+        elif len(args) == 0:
+        	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         
-        self.location = (x,y)
+        return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+
+#this class will be used to construct a connected graph from map from text file       
+class Node:
+	def __init__(self, coordinates, state):
+		self.x = coordinates[0]
+		self.y = coordinates[1]
+		self.visited = False
+		self.neighbors = state.getTransitions(x, y)
+		self.isTarget = state.getCoord(x,y) == '.'
+
 m1 = State("mediumMaze.txt")
 print(m1)
 print("Current Location: " + str(m1.location))
