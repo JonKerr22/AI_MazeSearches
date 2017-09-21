@@ -59,7 +59,8 @@ class State:
     def reorderTargets(self):
     	if len(self.targets == 1):
     		return null
-
+    def currentMDistance(self):
+    	return abs(self.location[0] - self.targets[0][0]) + abs(self.location[1] - self.targets[0][1])
 #this class will be used to construct a connected graph from map from text file       
 class Node:
 	def __init__(self, coordinates, state):
@@ -78,12 +79,12 @@ class Node:
 
 
 m1 = State("mediumMaze.txt")
-startNode = Node((m1.location[0],m1.location[1]),m1)
+#startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
-print("curr Mdistance " + str(startNode.manhattanDistance))
+print("curr Mdistance " + str(m1.currentMDistance()))
             
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
