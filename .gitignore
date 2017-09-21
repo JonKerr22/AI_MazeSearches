@@ -1,0 +1,9 @@
+#maze files
+mediumMaze.txt
+mediumSearch.txt
+smallSearch.txt
+openMaze.txt
+tinySearch.txt
+
+#maze folder
+maze

@@ -51,11 +51,14 @@ class State:
         return self.getCoord(x,y) == '%'
     def getTransitions(self, *args):
     	if len(args) == 2:
-    		moves = [add_tuples((x,y), move) for move in POSSIBLE_MOVES]
+    		moves = [add_tuples((self.location[0],self.location[1]), move) for move in POSSIBLE_MOVES]
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+    def reorderTargets(self):
+    	if len(self.targets == 1):
+    		return null
 
 #this class will be used to construct a connected graph from map from text file       
 class Node:
@@ -63,14 +66,24 @@ class Node:
 		self.x = coordinates[0]
 		self.y = coordinates[1]
 		self.visited = False
-		self.neighbors = state.getTransitions(x, y)
-		self.isTarget = state.getCoord(x,y) == '.'
+		self.neighbors = state.getTransitions(self.x, self.y)
+		self.isTarget = state.getCoord(self.x,self.y) == '.'
+		#distance from the first target
+		self.manhattanDistance = abs(self.x - state.targets[0][0]) + abs(self.y - state.targets[0][1])
+		
+
+	#def onNode(self):
+	#	self.visited = True
+	#def unvisit(self):
+
 
 m1 = State("mediumMaze.txt")
+startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
+print("curr Mdistance " + str(startNode.manhattanDistance))
             
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
