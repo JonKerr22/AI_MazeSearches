@@ -33,6 +33,7 @@ class State:
         self.map = []
         self.location = (-1,-1)
         self.targets = []
+        self.visited = []
         textFile = open(filepath)
         lines = textFile.readlines()
         for i, line in enumerate(lines):
@@ -54,7 +55,7 @@ class State:
     		moves = [add_tuples((self.location[0],self.location[1]), move) for move in POSSIBLE_MOVES]
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
-        
+        #TODO: filter out visited locations as well
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
     #just orders lowest to highest x values, 
     #this is definitely a bad hueristic, 
@@ -73,6 +74,7 @@ class State:
     #assuming only valid moves with step cost 1 will be passed into this function
     def makeMove(self, newX, newY):
     	#mark current spot as visited, I'm not sure how we want to do this
+    	self.markVistied()
 
     	direction = "" #used to keep track of overall path taken
     	if(self.location[0] != newX):
@@ -85,12 +87,13 @@ class State:
     			direction = "D"
     		else:
     			direction = "U"
-    	
+
     	self.location[0] = newX
     	self.location[1] = newY
     	return direction
-
-
+    #simple list of tuples for visited, we might need to change format for larger mazes
+    def markVistied(self):
+    	sel.visited.append((self.location[0], self.location[1]))
 
 #this class will be used to construct a connected graph from map from text file       
 class Node:
