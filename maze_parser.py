@@ -56,11 +56,42 @@ class State:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+    #just orders lowest to highest x values, 
+    #this is definitely a bad hueristic, 
+    #just a placeholder for now	    
     def reorderTargets(self):
-    	if len(self.targets == 1):
-    		return null
+    	if len(self.targets) > 1:
+    		self.targets.sort()
     def currentMDistance(self):
     	return abs(self.location[0] - self.targets[0][0]) + abs(self.location[1] - self.targets[0][1])
+    def allMDistnaces(self):
+    		distances = []
+    		for i in range(len(self.targets)):
+    			distances.append(abs(self.location[0] - self.targets[i][0]) + abs(self.location[1] - self.targets[i][1]))
+    		return distances
+
+    #assuming only valid moves with step cost 1 will be passed into this function
+    def makeMove(self, newX, newY):
+    	#mark current spot as visited, I'm not sure how we want to do this
+
+    	direction = "" #used to keep track of overall path taken
+    	if(self.location[0] != newX):
+    		if(self.location[0] < newX):
+    			direction = "R"
+    		else:
+    			direction = "L"
+    	elif(self.location[1] != newY):
+    		if(self.location[1] < newY):
+    			direction = "D"
+    		else:
+    			direction = "U"
+    	
+    	self.location[0] = newX
+    	self.location[1] = newY
+    	return direction
+
+
+
 #this class will be used to construct a connected graph from map from text file       
 class Node:
 	def __init__(self, coordinates, state):
@@ -84,7 +115,9 @@ print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
-print("curr Mdistance " + str(m1.currentMDistance()))
+print("curr Mdistances " + str(m1.allMDistnaces()))
+m1.reorderTargets()
+print("reordered targets " + str(m1.targets))
             
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
