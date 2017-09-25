@@ -55,6 +55,7 @@ class State:
     		moves = [add_tuples((self.location[0],self.location[1]), move) for move in POSSIBLE_MOVES]
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
+        
         #TODO: filter out visited locations as well
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
     #just orders lowest to highest x values, 
@@ -74,7 +75,7 @@ class State:
     #assuming only valid moves with step cost 1 will be passed into this function
     def makeMove(self, newX, newY):
     	#mark current spot as visited, I'm not sure how we want to do this
-    	self.markVistied()
+    	self.markVisited()
 
     	direction = "" #used to keep track of overall path taken
     	if(self.location[0] != newX):
@@ -92,8 +93,10 @@ class State:
     	self.location[1] = newY
     	return direction
     #simple list of tuples for visited, we might need to change format for larger mazes
-    def markVistied(self):
-    	sel.visited.append((self.location[0], self.location[1]))
+    def markVisited(self):
+    	self.visited.append((self.location[0], self.location[1]))
+    def visitCheck(self):
+    	return [self.location[0], self.location[1]] in self.visited
 
 #this class will be used to construct a connected graph from map from text file       
 class Node:

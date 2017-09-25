@@ -1,0 +1,8 @@
+As of 1:30pm on Tuesday 9/25:
+	filter out visited squares from getTransitions function
+	confirm that visited logic makes sense
+	test bfs with backtrace
+	create backtrace for bfs
+	constructing, testing, & debugging for dfs, greedy, and a* algorithms
+	Fully accounting for multiple targets aka, all of 1.2
+	-jon

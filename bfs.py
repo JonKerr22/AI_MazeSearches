@@ -8,7 +8,7 @@ def bfsRecursive(state, currX, currY, targetX, targetY):
 	moves = state.getTransitions() #only returns valid moves from current location
 	#i=0
 	if len(moves) == 0:
-		return -1
+		return "b" #b=bad path
 	for move in moves:
 		#check if visited, if yes ignore
 		if [(move[0], move[1])] in state.visited:
