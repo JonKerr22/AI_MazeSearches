@@ -55,8 +55,8 @@ class State:
     		moves = [add_tuples((self.location[0],self.location[1]), move) for move in POSSIBLE_MOVES]
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
-        
-        #TODO: filter out visited locations as well
+
+        #TODO: filter out visited locations as well, maybe
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
     #just orders lowest to highest x values, 
     #this is definitely a bad hueristic, 

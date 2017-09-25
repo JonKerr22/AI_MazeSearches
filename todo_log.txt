@@ -1,8 +1,10 @@
 As of 1:30pm on Tuesday 9/25:
 	filter out visited squares from getTransitions function
+		--possibly done, but untested
 	confirm that visited logic makes sense
-	test bfs with backtrace
 	create backtrace for bfs
+		--done but not test
+	test bfs with backtrace
 	constructing, testing, & debugging for dfs, greedy, and a* algorithms
 	Fully accounting for multiple targets aka, all of 1.2
 	-jon
