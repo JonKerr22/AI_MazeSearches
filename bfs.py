@@ -15,7 +15,7 @@ def bfsRecursive(state, currX, currY, targetX, targetY):
 			continue  
 		if move[0] == targetX and move[1] == targetY:
 			return state.makeMove(move[0], move[1])
-
+ 
 	#makeMove function both moves the player, and saves direction moved
 	direction = state.makeMove(moves[0][0], moves[0][1])
 	return direction + bfsRecursive(state, state.location[0], state.location[1], targetX, targetY)
