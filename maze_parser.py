@@ -63,6 +63,9 @@ class State:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
 
         #TODO: filter out visited locations as well, maybe
+        for move in moves:
+        	if move in self.visited:
+        		moves.remove(move)
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
     #just orders lowest to highest x values, 
     #this is definitely a bad hueristic, 
@@ -120,12 +123,14 @@ class Node:
 	#def unvisit(self):
 
 
-m1 = State("mediumMaze.txt")
+m1 = State("easyMaze.txt")
 #startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
-print("Valid moves: " + str(m1.getTransitions()))
+moves = m1.getTransitions()
+print moves[0][0]
+print("Valid moves: " + str(moves))
 #print("curr Mdistances " + str(m1.allMDistnaces()))
 #m1.reorderTargets()
 #print("reordered targets " + str(m1.targets))
