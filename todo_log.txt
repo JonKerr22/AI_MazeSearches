@@ -1,4 +1,4 @@
-As of 1:30pm on Tuesday 9/25:
+As of 1:30pm on Monday 9/25:
 	filter out visited squares from getTransitions function
 		--possibly done, but untested
 	confirm that visited logic makes sense
@@ -7,4 +7,15 @@ As of 1:30pm on Tuesday 9/25:
 	test bfs with backtrace
 	constructing, testing, & debugging for dfs, greedy, and a* algorithms
 	Fully accounting for multiple targets aka, all of 1.2
+	-jon
+
+As of 6:42 on Wednesday 9/27:
+	Finished: filtering visited sqaures
+	BFS turned out to be a dfs algo, so bfs now super unfinished
+	dfs works on medium, open, and small mazes, but recurses too deep on bigMaze
+		--cannot get the path to return for some fucking reason
+		--honestly the most frustrating thing
+	still need, bfs, greedy, and a*
+	still need to account for multiple targets
+
 	-jon

@@ -62,11 +62,26 @@ class State:
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
 
+        #print str(moves)
+        #try:
+    	#input("Press enter to continue")
+
+		#except:
+    	#	pass
         #TODO: filter out visited locations as well, maybe
+        '''
+        print str(moves)
         for move in moves:
+        	print str(move)
+        	print str(self.visited)
         	if move in self.visited:
+        		print str(move) + "visited, so removed from" +str(moves)
         		moves.remove(move)
-        return filter(lambda coord: not self.isWall(coord[0],coord[1]), moves)
+        		print "new moves: " + str(moves)
+        '''
+        notYetVisited = filter(lambda loc: loc not in self.visited, moves)
+        
+        return filter(lambda coord: not self.isWall(coord[0],coord[1]), notYetVisited)
     #just orders lowest to highest x values, 
     #this is definitely a bad hueristic, 
     #just a placeholder for now	    
@@ -105,6 +120,8 @@ class State:
     	self.visited.append((self.location[0], self.location[1]))
     def visitCheck(self):
     	return [self.location[0], self.location[1]] in self.visited
+    def visitedSpots(self):
+    	return self.visited
 
 #this class will be used to construct a connected graph from map from text file       
 class Node:
@@ -123,7 +140,7 @@ class Node:
 	#def unvisit(self):
 
 
-m1 = State("easyMaze.txt")
+m1 = State("openMaze.txt")
 #startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
@@ -132,7 +149,8 @@ print("Valid moves: " + str(m1.getTransitions()))
 #print("curr Mdistances " + str(m1.allMDistnaces()))
 #m1.reorderTargets()
 #print("reordered targets " + str(m1.targets))
-a = str(dfs(m1))
+print " "
+a = str(dfs(m1)) 
 print(str(a))
 
 print(m1.getCoord(0,0))
