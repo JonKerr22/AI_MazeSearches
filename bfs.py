@@ -1,3 +1,6 @@
+#import maze_parser
+#from maze_parser import State
+
 #want this to be recursive
 def bfs(state):
 	#currently only searches for first target
@@ -12,11 +15,11 @@ def bfsRecursive(state, currX, currY, targetX, targetY, path):
 		#undo last move
 		if(path[-1:] == "R"):
 			state.makeMove(currX -1, currY)
-		elif(path[-1:] == "L")
+		elif(path[-1:] == "L"):
 			state.makeMove(currX + 1, currY)
-		elif(path[-1:] == "U")
+		elif(path[-1:] == "U"):
 			state.makeMove(currX, currY -1)
-		elif(path[-1:] == "D")
+		elif(path[-1:] == "D"):
 			state.makeMove(currX, currY + 1)
 		
 		path = path[:-1] #remove last char

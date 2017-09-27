@@ -8,3 +8,6 @@ tinySearch.txt
 
 #maze folder
 maze
+
+#compiled files
+*.pyc

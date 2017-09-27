@@ -1,3 +1,9 @@
+import bfs, dfs, greedy, aStar
+from bfs import bfs 
+from dfs import dfs
+from greedy import greedySearch
+from aStar import aStarSearch
+
 #all the vars we will need
 #convetions, upper right is (0,0) coordinate
 #state = {location =(x,y), targets {(x1,y1), (x2,y2)...}}
@@ -89,8 +95,7 @@ class State:
     		else:
     			direction = "U"
 
-    	self.location[0] = newX
-    	self.location[1] = newY
+    	self.location = (newX, newY)
     	return direction
     #simple list of tuples for visited, we might need to change format for larger mazes
     def markVisited(self):
@@ -121,9 +126,11 @@ print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
-print("curr Mdistances " + str(m1.allMDistnaces()))
-m1.reorderTargets()
-print("reordered targets " + str(m1.targets))
-            
+#print("curr Mdistances " + str(m1.allMDistnaces()))
+#m1.reorderTargets()
+#print("reordered targets " + str(m1.targets))
+a = bfs(m1)
+print(a)
+
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
