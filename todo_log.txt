@@ -13,8 +13,9 @@ As of 6:42 on Wednesday 9/27:
 	Finished: filtering visited sqaures
 	BFS turned out to be a dfs algo, so bfs now super unfinished
 	dfs works on medium, open, and small mazes, but recurses too deep on bigMaze
-		--cannot get the path to return for some fucking reason
+		--cannot get the path to return for some reason
 		--honestly the most frustrating thing
+			--FIXED 
 	still need, bfs, greedy, and a*
 	still need to account for multiple targets
 

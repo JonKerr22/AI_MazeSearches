@@ -140,7 +140,7 @@ class Node:
 	#def unvisit(self):
 
 
-m1 = State("openMaze.txt")
+m1 = State("bigMaze.txt")
 #startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
@@ -151,7 +151,7 @@ print("Valid moves: " + str(m1.getTransitions()))
 #print("reordered targets " + str(m1.targets))
 print " "
 a = str(dfs(m1)) 
-print(str(a))
+print("Path taken:\n" + a + "\nStep Cost: " + str(len(a)) )
 
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
