@@ -6,4 +6,5 @@ def bfs(start, map):
     frontier = Queue()
 
 
+m1 = State("easyMaze.txt")
 	

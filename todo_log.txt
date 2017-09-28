@@ -1,0 +1,36 @@
+As of 1:30pm on Monday 9/25:
+	filter out visited squares from getTransitions function
+		--possibly done, but untested
+	confirm that visited logic makes sense
+	create backtrace for bfs
+		--done but not test
+	test bfs with backtrace
+	constructing, testing, & debugging for dfs, greedy, and a* algorithms
+	Fully accounting for multiple targets aka, all of 1.2
+	-jon
+
+As of 6:42 on Wednesday 9/27:
+	Finished: filtering visited sqaures
+	BFS turned out to be a dfs algo, so bfs now super unfinished
+	dfs works on medium, open, and small mazes, but recurses too deep on bigMaze
+		--cannot get the path to return for some reason
+		--honestly the most frustrating thing
+	still need, bfs, greedy, and a*
+	still need to account for multiple targets
+
+	-jon
+
+	from midnight on 9/27:
+		path returns properly
+		dfs works on easy, open, and medium mazes
+		dfs keeps track of expanded nodes
+		in order to stop having the bigMaze going crazy deep, I'm trying to
+		 start searching from both the start and the end by using two 
+		 state objects, one with normal start location, the other with a 
+		 start location of the target. they then do their own repective dfs
+		 searches trying to find each other, and return their concatenated paths
+		 and combined expanded node count. Currently this is running into 
+		 a problem where the backtrace path ends up running too deep or just
+		 straight up fails.
+		dfs still works fine for 1-way on easy, open, and med mazes
+		some more functions added to the state class

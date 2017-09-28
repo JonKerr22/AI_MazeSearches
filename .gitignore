@@ -1,0 +1,14 @@
+#maze files
+bigMaze.txt
+mediumMaze.txt
+mediumSearch.txt
+smallSearch.txt
+openMaze.txt
+tinySearch.txt
+easyMaze.txt
+
+#maze folder
+maze
+
+#compiled files
+*.pyc
