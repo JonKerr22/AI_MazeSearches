@@ -62,26 +62,9 @@ class State:
         elif len(args) == 0:
         	moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
 
-        #print str(moves)
-        #try:
-    	#input("Press enter to continue")
-
-		#except:
-    	#	pass
-        #TODO: filter out visited locations as well, maybe
-        '''
-        print str(moves)
-        for move in moves:
-        	print str(move)
-        	print str(self.visited)
-        	if move in self.visited:
-        		print str(move) + "visited, so removed from" +str(moves)
-        		moves.remove(move)
-        		print "new moves: " + str(moves)
-        '''
-        notYetVisited = filter(lambda loc: loc not in self.visited, moves)
-        
+        notYetVisited = filter(lambda loc: loc not in self.visited, moves)        
         return filter(lambda coord: not self.isWall(coord[0],coord[1]), notYetVisited)
+
     #just orders lowest to highest x values, 
     #this is definitely a bad hueristic, 
     #just a placeholder for now	    
@@ -122,36 +105,41 @@ class State:
     	return [self.location[0], self.location[1]] in self.visited
     def visitedSpots(self):
     	return self.visited
+    def takePath(self, path):
+    	for m in path:
+	    	self.map[self.location[1]][self.location[0]] = "."
+	    	if m == "R":
+	    		self.location = (self.location[0]+1, self.location[1])
+	    	elif m == "L":
+	    		self.location = (self.location[0]-1, self.location[1])
+	    	elif m == "D":
+	    		self.location = (self.location[0], self.location[1]+1)
+	    	elif m == "U":
+	    		self.location = (self.location[0], self.location[1]-1)
+	    	else:
+	    		print "Invalid path"
+	    		return -1
+    	return 1
+    def atTarget(self, locationX, locationY, targetX, targetY):
+    	return locationX == targetX and locationY == targetY
 
-#this class will be used to construct a connected graph from map from text file       
-class Node:
-	def __init__(self, coordinates, state):
-		self.x = coordinates[0]
-		self.y = coordinates[1]
-		self.visited = False
-		self.neighbors = state.getTransitions(self.x, self.y)
-		self.isTarget = state.getCoord(self.x,self.y) == '.'
-		#distance from the first target
-		self.manhattanDistance = abs(self.x - state.targets[0][0]) + abs(self.y - state.targets[0][1])
-		
-
-	#def onNode(self):
-	#	self.visited = True
-	#def unvisit(self):
-
-
-m1 = State("bigMaze.txt")
+m1 = State("easyMaze.txt")
 #startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
 print("Target Locations: " +str(m1.targets))
 print("Valid moves: " + str(m1.getTransitions()))
-#print("curr Mdistances " + str(m1.allMDistnaces()))
-#m1.reorderTargets()
-#print("reordered targets " + str(m1.targets))
+startLocation = m1.location
+
 print " "
-a = str(dfs(m1)) 
-print("Path taken:\n" + a + "\nStep Cost: " + str(len(a)) )
+a = dfs(m1)
+path = a[0]
+totalCost = a[1] 
+print("Path taken:\n" + path + "\nStep Cost: " + str(len(path)) + "\nTotal nodes expanded: " + str(totalCost))
+m1.makeMove(startLocation[0], startLocation[1])
+valid = m1.takePath(path)
+if valid>0: 
+	print(m1)
 
 print(m1.getCoord(0,0))
 print(m1.getCoord((0,0)))
