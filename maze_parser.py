@@ -35,20 +35,27 @@ def accepts_tuple_arg(func):
 def add_tuples(a,b):
     return tuple([sum(x) for x in zip(a,b)])
 class State:
-    def __init__(self, filepath):
-        self.map = []
-        self.location = (-1,-1)
-        self.targets = []
-        self.visited = []
-        textFile = open(filepath)
-        lines = textFile.readlines()
-        for i, line in enumerate(lines):
-            j = line.find('P')
-            if j != -1:
-                self.location = (j, i)
-            line = list(line)
-            self.map.append(line)
-            self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
+    def __init__(self, filepath = None, copyState = None):
+        if(copyState == None):
+            self.map = [] 
+            self.location = (-1,-1)
+            self.targets = []
+            self.visited = []
+            textFile = open(filepath)
+            lines = textFile.readlines()
+            for i, line in enumerate(lines):
+                j = line.find('P')
+                if j != -1:
+                    self.location = (j, i)
+                line = list(line)
+                self.map.append(line)
+                self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
+
+        elif(filepath == None):
+            self.map = copyState.map
+            self.location = copyState.location
+            self.targets = copyState.targets
+            self.visited = copyState.visited
     def __str__(self):
         return ''.join([''.join(row) for row in self.map])
     @accepts_tuple_arg
@@ -122,8 +129,10 @@ class State:
     	return 1
     def atTarget(self, locationX, locationY, targetX, targetY):
     	return locationX == targetX and locationY == targetY
+    def makeCopy(self):
+    	return State(None, self)
 
-m1 = State("easyMaze.txt")
+m1 = State("easyMaze.txt", )
 #startNode = Node((m1.location[0],m1.location[1]),m1)
 print(m1)
 print("Current Location: " + str(m1.location))
@@ -132,7 +141,7 @@ print("Valid moves: " + str(m1.getTransitions()))
 startLocation = m1.location
 
 print " "
-a = dfs(m1)
+a = dfs(m1, 1)
 path = a[0]
 totalCost = a[1] 
 print("Path taken:\n" + path + "\nStep Cost: " + str(len(path)) + "\nTotal nodes expanded: " + str(totalCost))

@@ -1,11 +1,16 @@
-
-def dfs(state): 
+def dfs(state, wayOption): 
 	path = ""
 	totalStep = 0
-	(path, totalStep) = dfsRecursive(state, state.targets[0][0], state.targets[0][1], path, totalStep)
+	if wayOption == 1:
+		(path, totalStep) = dfsRecursive_oneWay(state, state.targets[0][0], state.targets[0][1], path, totalStep)
+	elif wayOption == 2:
+		(path, totalStep) = dfs_twoWay(state, state.targets[0][0], state.targets[0][1], path, totalStep)
+	else:
+		print "pick either 1 or 2 for search directions"
+		return ("-1", -1)
 	return (path, totalStep)
 
-def dfsRecursive(state, targetX, targetY, path, steps):
+def dfsRecursive_oneWay(state, targetX, targetY, path, steps):
 	moves = state.getTransitions() #only returns valid moves from current location
 	'''
 	if steps > 100: #debugging statement
@@ -38,9 +43,65 @@ def dfsRecursive(state, targetX, targetY, path, steps):
 				steps+=1
 				return (str(path), steps)
 
-		#makeMove function both moves the player, direction moved
+		#makeMove function both moves the player, retuns direction moved
 		path+= str(state.makeMove(moves[0][0], moves[0][1]))
 		steps+=1
-	(finalPath, steps) = dfsRecursive(state, targetX, targetY, path, steps)
+	(finalPath, steps) = dfsRecursive_oneWay(state, targetX, targetY, path, steps)
 	return (str(finalPath), steps)
-	#return dfsRecursive(state, targetX, targetY, path, steps)
+
+def dfs_twoWay(state, targetX, targetY, path, steps):
+	reverseState = state.makeCopy()
+	reverseState.targets = reverseState.location
+	reverseState.location = (targetX, targetY)
+
+	print("reversed start location: " + str(reverseState.location))
+	print("reversed start target: " + str(reverseState.targets))
+	pathF = ""
+	pathB = ""
+	(pathF, pathB, steps) = dfsRecursive_twoWay(state, reverseState, pathF, pathB, steps)
+	path = pathF + pathB
+	return (path,steps)
+
+def dfsRecursive_twoWay(stateF, stateB, pathF, pathB, steps):
+	fMoves = stateF.getTransitions()
+	bMoves = stateB.getTransitions()
+	if len(fMoves) == 0:
+		stateF.markVisited() 
+		if(pathF[-1:] == "R"):
+			stateF.makeMove(stateF.location[0] -1, stateF.location[1])
+		elif(pathF[-1:] == "L"):
+			stateF.makeMove(stateF.location[0] +1, stateF.location[1])
+		elif(pathF[-1:] == "U"):
+			stateF.makeMove(stateF.location[0], stateF.location[1] +1)
+		elif(pathF[-1:] == "D"):
+			stateF.makeMove(stateF.location[0], stateF.location[1] -1)
+		
+		pathF = pathF[:-1] 
+	elif len(bMoves) == 0:
+		print(pathB)
+		stateB.markVisited()#no path from here, dont come back
+		#undo last move
+		if(pathB[0] == "R"):
+			stateB.makeMove(stateB.location[0] -1, stateB.location[1])
+		elif(pathB[-1:] == "L"):
+			stateB.makeMove(stateB.location[0] +1, stateB.location[1])
+		elif(pathB[-1:] == "U"):
+			stateB.makeMove(stateB.location[0], stateB.location[1] +1)
+		elif(pathB[-1:] == "D"):
+			stateB.makeMove(stateB.location[0], stateB.location[1] -1)
+
+		pathB = pathB[1:]
+	else:	
+		for move in fMoves: 
+			if stateF.atTarget(move[0], move[1], stateB.location[0], stateB.location[1]):
+				print "target hit"
+				pathF+= str(stateF.makeMove(move[0], move[1]))
+				steps+=1
+				return (str(pathF), str(pathB), steps)
+
+		#makeMove function both moves the player, returns direction moved
+		pathF+= str(stateF.makeMove(fMoves[0][0], fMoves[0][1]))
+		pathB = str(stateB.makeMove(bMoves[0][0], bMoves[0][1])) + pathB
+		steps+=2
+	(pathF, pathB, steps) = dfsRecursive_twoWay(stateF, stateB, pathF, pathB, steps)
+	return (str(pathF), str(pathB), steps)
