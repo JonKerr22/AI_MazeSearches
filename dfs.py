@@ -17,5 +17,5 @@ def dfs(state):
         except ValueError:
             pass
 if __name__ == "__main__":
-    m1 = State("mediumMaze.txt")
+    m1 = State("mediumMaze.txt",.1)
     dfs(m1)

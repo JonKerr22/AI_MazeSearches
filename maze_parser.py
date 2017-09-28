@@ -1,6 +1,7 @@
 from __future__ import print_function
 from collections import defaultdict
 import sys
+import utils
 from time import sleep
 
 #all the vars we will need
@@ -80,13 +81,20 @@ class State:
             self.setCoord(coord, '.')
         self.setCoord(self.location, 'P')
         return ''.join([''.join(row) for row in self.map])
+    def colorize(self):
+        string = str(self)
+        string = string.replace('%', utils.lightGrayBG('%'))
+        string = string.replace('.', utils.greenText('.'))
+        string = string.replace('P', utils.cyanText('P'))
+        string = string.replace('v', utils.darkGrayBG('v'))
+        return string
     def printStatus(self):
         maze_height = len(self.map)
         if self.firstPrint:
             self.firstPrint = False
         else:
             scrollUp(maze_height+3)
-        sys.stdout.write(str(self) + 
+        sys.stdout.write(self.colorize() + 
                          "\nCurrent Location: " + str(self.location) + 
                          "\nTarget Locations: " +str(self.targets) + 
                          "\nValid moves: " + str(self.getTransitions()) + "\n")

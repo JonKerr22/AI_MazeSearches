@@ -1,0 +1,42 @@
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def redText(text):
+    return '\e[30m'+str(text)+bcolors.ENDC
+
+def redBG(text):
+    return '\e[41m'+str(text)+bcolors.ENDC
+def greenBG(text):
+    return '\e[42m'+str(text)+bcolors.ENDC
+def yellowBG(text):
+    return '\e[43m'+str(text)+bcolors.ENDC
+def blueBG(text):
+    return '\e[44m'+str(text)+bcolors.ENDC
+def magentaBG(text):
+    return '\e[45m'+str(text)+bcolors.ENDC
+def cyanBG(text):
+    return '\e[46m'+str(text)+bcolors.ENDC
+def lightGrayBG(text):
+    return '\e[47m'+str(text)+bcolors.ENDC
+def darkGrayBG(text):
+    return '\e[100m'+str(text)+bcolors.ENDC
+def whiteBG(text):
+    return '\e[107m'+str(text)+bcolors.ENDC
+
+
+
+
+
+
+
+
+
+
+
