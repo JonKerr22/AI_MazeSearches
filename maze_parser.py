@@ -45,7 +45,6 @@ def scrollDown(n=1):
         sys.stdout.write('\n')
         sys.stdout.flush()
 class State:
-<<<<<<< HEAD
     def __init__(self, filepath, moveDelay = .5):
         self.map = []
         self.location = (-1,-1)
