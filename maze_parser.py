@@ -140,6 +140,7 @@ class State:
         self.location = self.finalPath[-1]
         sleef(self.moveDelay)
         self.printStatus()
+
 #this class will be used to construct a connected graph from map from text file       
 class Node:
     def __init__(self, coordinates, state):
@@ -161,26 +162,6 @@ class Node:
         for i in range(len(self.targets)):
             distances.append(abs(self.location[0] - self.targets[i][0]) + abs(self.location[1] - self.targets[i][1]))
         return distances
-
-    #assuming only valid moves with step cost 1 will be passed into this function
-    def makeMove(self, newX, newY):
-    	#mark current spot as visited, I'm not sure how we want to do this
-    	self.markVisited()
-
-    	direction = "" #used to keep track of overall path taken
-    	if(self.location[0] != newX):
-    		if(self.location[0] < newX):
-    			direction = "R"
-    		else:
-    			direction = "L"
-    	elif(self.location[1] != newY):
-    		if(self.location[1] < newY):
-    			direction = "D"
-    		else:
-    			direction = "U"
-
-    	self.location = (newX, newY)
-    	return direction
     #simple list of tuples for visited, we might need to change format for larger mazes
     def markVisited(self):
     	self.visited[self.location] = True
@@ -188,23 +169,7 @@ class Node:
     	return self.visited == True
     def visitedSpots(self):
     	return self.visited
-    def takePath(self, path):
-    	for m in path:
-            self.map[self.location[1]][self.location[0]] = "."
-            if m == "R":
-                self.location = (self.location[0]+1, self.location[1])
-            elif m == "L":
-                self.location = (self.location[0]-1, self.location[1])
-            elif m == "D":
-                self.location = (self.location[0], self.location[1]+1)
-            elif m == "U":
-                self.location = (self.location[0], self.location[1]-1)
-            else:
-                print("Invalid path")
-                return -1
-    	return 1
-    def atTarget(self, locationX, locationY, targetX, targetY):
-    	return locationX == targetX and locationY == targetY
+   
 if __name__ == "__main__":
     m1 = State("easyMaze.txt")
     m1.printStatus()

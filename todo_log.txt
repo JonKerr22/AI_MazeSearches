@@ -34,3 +34,13 @@ As of 6:42 on Wednesday 9/27:
 		 straight up fails.
 		dfs still works fine for 1-way on easy, open, and med mazes
 		some more functions added to the state class
+
+midnight on 9/28:
+	dfs, bfs can do all single target searches
+	  on multi targets they do go over each target, but 
+	  the shortest path doesn't save the path to the first target, 
+	  then the second one, then the third, then ...
+	  those get overwritten with visited symbols
+	  so it might still preserve the paths, but they aren't marked
+	greedy, a* still need completion
+		-jon
