@@ -71,6 +71,7 @@ class State:
             self.map.append(line)
             self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
         self.move(self.location)
+
     def __str__(self):
         for key, value in self.shortestPaths.items():
             self.setCoord(key, len(value)%10)
@@ -169,7 +170,7 @@ class Node:
     	return self.visited == True
     def visitedSpots(self):
     	return self.visited
-   
+
 if __name__ == "__main__":
     m1 = State("easyMaze.txt")
     m1.printStatus()

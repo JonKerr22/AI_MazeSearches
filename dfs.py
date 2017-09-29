@@ -19,3 +19,4 @@ def dfs(state):
 if __name__ == "__main__":
     m1 = State("smallSearch.txt",.1)
     dfs(m1)
+
