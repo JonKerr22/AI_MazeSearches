@@ -72,29 +72,7 @@ class State:
             self.map.append(line)
             self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
         self.move(self.location)
-=======
-    def __init__(self, filepath = None, copyState = None):
-        if(copyState == None):
-            self.map = [] 
-            self.location = (-1,-1)
-            self.targets = []
-            self.visited = []
-            textFile = open(filepath)
-            lines = textFile.readlines()
-            for i, line in enumerate(lines):
-                j = line.find('P')
-                if j != -1:
-                    self.location = (j, i)
-                line = list(line)
-                self.map.append(line)
-                self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
 
-        elif(filepath == None):
-            self.map = copyState.map
-            self.location = copyState.location
-            self.targets = copyState.targets
-            self.visited = copyState.visited
->>>>>>> 161a165d387b6424945b037e31027164c205aa79
     def __str__(self):
         for key, value in self.shortestPaths.items():
             self.setCoord(key, len(value)%10)
@@ -193,53 +171,10 @@ class Node:
     	return self.visited == True
     def visitedSpots(self):
     	return self.visited
-<<<<<<< HEAD
-   
+
 if __name__ == "__main__":
     m1 = State("easyMaze.txt")
     m1.printStatus()
     m1.move(23,1)
     m1.move(23,2)
     m1.move(22,2)
-=======
-    def takePath(self, path):
-    	for m in path:
-	    	self.map[self.location[1]][self.location[0]] = "."
-	    	if m == "R":
-	    		self.location = (self.location[0]+1, self.location[1])
-	    	elif m == "L":
-	    		self.location = (self.location[0]-1, self.location[1])
-	    	elif m == "D":
-	    		self.location = (self.location[0], self.location[1]+1)
-	    	elif m == "U":
-	    		self.location = (self.location[0], self.location[1]-1)
-	    	else:
-	    		print "Invalid path"
-	    		return -1
-    	return 1
-    def atTarget(self, locationX, locationY, targetX, targetY):
-    	return locationX == targetX and locationY == targetY
-    def makeCopy(self):
-    	return State(None, self)
-
-m1 = State("easyMaze.txt", )
-#startNode = Node((m1.location[0],m1.location[1]),m1)
-print(m1)
-print("Current Location: " + str(m1.location))
-print("Target Locations: " +str(m1.targets))
-print("Valid moves: " + str(m1.getTransitions()))
-startLocation = m1.location
-
-print " "
-a = dfs(m1, 1)
-path = a[0]
-totalCost = a[1] 
-print("Path taken:\n" + path + "\nStep Cost: " + str(len(path)) + "\nTotal nodes expanded: " + str(totalCost))
-m1.makeMove(startLocation[0], startLocation[1])
-valid = m1.takePath(path)
-if valid>0: 
-	print(m1)
-
-print(m1.getCoord(0,0))
-print(m1.getCoord((0,0)))
->>>>>>> 161a165d387b6424945b037e31027164c205aa79

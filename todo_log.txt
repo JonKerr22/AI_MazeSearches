@@ -33,7 +33,6 @@ As of 6:42 on Wednesday 9/27:
 		 a problem where the backtrace path ends up running too deep or just
 		 straight up fails.
 		dfs still works fine for 1-way on easy, open, and med mazes
-<<<<<<< HEAD
 		some more functions added to the state class
 
 midnight on 9/28:
@@ -45,6 +44,3 @@ midnight on 9/28:
 	  so it might still preserve the paths, but they aren't marked
 	greedy, a* still need completion
 		-jon
-=======
-		some more functions added to the state class
->>>>>>> 161a165d387b6424945b037e31027164c205aa79
