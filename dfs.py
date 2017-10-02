@@ -12,24 +12,42 @@ eg:
 ----
 (1,2) = [a,b,c,f,g,h,g,f,c,d,e]
 
-"""
-def recomputePath(originalPath, pathWithTarget):
-    lastCommonIndex = len(originalPath)-1
-    for i in range(len(originalPath)):
-        if originalPath[i] != pathWithTarget[i]:
-            lastCommonIndex = i
-            break
 
-    return pathWithTarget + list(reversed(pathWithTarget[-lastCommonIndex:])) + originalPath[lastCommonIndex:]
-   
+Unsustainable. This will roughly double the path length
+"""
+#Computes a path from a to b
+def recomputePath(a, b):
+    a_reverse = list(reversed(a))
+    b_reverse = list(reversed(b))
+    shortestPathLen = len(a)+len(b)
+    bestI = 0
+    bestJ = 0
+    for i, x in enumerate(a_reverse):
+        if i > shortestPathLen:
+            break
+        j = -1
+        try:
+            j = b_reverse[:shortestPathLen-i].index(x)
+        except ValueError:
+            continue
+        pathLen = i + j
+        if pathLen < shortestPathLen:
+            shortestPathLen = pathLen
+            bestI = i
+            bestJ = j
+    return a + a_reverse[1:bestI] + b[-bestJ:]
+        
 def dfs(state):
+    global minPathLength
     frontier = []
     frontier += state.getTransitions()
+    finalPath = []
     while len(state.targets) > 0:
         curr = frontier.pop()
         state.move(curr)
         try:
             state.targets.remove(curr)
+
             for coord in frontier:
                 state.shortestPaths[coord] = recomputePath(state.shortestPaths[coord], state.currentPath)
         except ValueError:

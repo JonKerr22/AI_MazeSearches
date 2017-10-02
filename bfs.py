@@ -10,16 +10,27 @@ eg:
 (1,2) = [a,b,c,f,g,h,g,f,c,d,e]
 
 """
-def recomputePath(originalPath, pathWithTarget):
-    lastCommonIndex = len(originalPath)-1
-    for i in range(len(originalPath)):
-        if i == len(pathWithTarget):
-            return pathWithTarget
-        if originalPath[i] != pathWithTarget[i]:
-            lastCommonIndex = i
+def recomputePath(a, b):
+    a_reverse = list(reversed(a))
+    b_reverse = list(reversed(b))
+    shortestPathLen = len(a)+len(b)
+    bestI = 0
+    bestJ = 0
+    for i, x in enumerate(a_reverse):
+        if i > shortestPathLen:
             break
+        j = -1
+        try:
+            j = b_reverse[:shortestPathLen-i].index(x)
+        except ValueError:
+            continue
+        pathLen = i + j
+        if pathLen < shortestPathLen:
+            shortestPathLen = pathLen
+            bestI = i
+            bestJ = j
+    return a + a_reverse[1:bestI] + b[-bestJ:]
 
-    return pathWithTarget + list(reversed(pathWithTarget[-lastCommonIndex:])) + originalPath[lastCommonIndex:]
 def bfs(state): 
     frontier = Queue()
     for move in state.getTransitions():

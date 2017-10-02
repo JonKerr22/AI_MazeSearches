@@ -53,6 +53,7 @@ class State:
         self.visited = defaultdict(bool)
         self.finalPath = []
         self.currentPath = []
+        self.numExpanded = 0
         """
         Each square on the frontier maintains a list of the paths used to reach it
         If the current path is shorter than the stored one, 
@@ -94,8 +95,8 @@ class State:
         if self.firstPrint:
             self.firstPrint = False
         else:
-            scrollUp(maze_height)
-        sys.stdout.write(self.colorize())
+            scrollUp(maze_height+2)
+        sys.stdout.write(self.colorize()+"Nodes expanded: "+str(self.numExpanded) + "\nPath Length: "+str(len(self.currentPath))+"\n")
         sys.stdout.flush()
     @accepts_tuple_arg
     def getCoord(self, x, y):
@@ -120,6 +121,7 @@ class State:
         self.location = (x,y)
         self.currentPath = self.shortestPaths[(x,y)]
         self.checkForShorterPaths()
+        self.numExpanded +=1
         """
         assert(legalMoves.index((x,y)) != -1)
         self.location = (x,y)

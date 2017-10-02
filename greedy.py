@@ -5,11 +5,13 @@ def greedy(state):
     
     while (len(state.targets) > 0):
         #find the closest target
+
         state.targets = sorted(state.targets, key=lambda x: 
             -(MDistance(state.location, x[0], x[1])))
         currTarget = state.targets.pop()
         while (state.location != currTarget):
-            neighbors = state.getTransitions()
+
+\            neighbors = state.getTransitions()
             for neighbor in neighbors:
                 if not state.visited[neighbor] and not neighbor in frontier:
                     frontier.append(neighbor)
