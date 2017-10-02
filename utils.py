@@ -40,6 +40,20 @@ def darkGrayBG(text):
 def whiteBG(text):
     return '\033[107m'+str(text)+bcolors.ENDC
 
+def accepts_tuple_arg(func):
+    def wrapper(*args, **kwargs):
+        #args = map(lambda arg: (arg[0],arg[1] if isinstance(arg,tuple) else arg), args)
+        #placeholder while I work on this
+        temp = []
+        for arg in args:
+            if isinstance(arg,tuple):
+                temp += [coord for coord in arg]
+            else:
+                temp.append(arg)
+        return func(*temp, **kwargs)
+    return wrapper
+def add_tuples(a,b):
+    return tuple([sum(x) for x in zip(a,b)])
 
 
 if __name__ == "__main__":

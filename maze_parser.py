@@ -2,7 +2,10 @@ from __future__ import print_function
 from collections import defaultdict
 import sys
 import utils
+from utils import accepts_tuple_arg, add_tuples
 from time import sleep
+from path import Path
+
 
 #all the vars we will need
 #convetions, upper right is (0,0) coordinate
@@ -19,20 +22,6 @@ from time import sleep
 # for part 2 at least, we need to remove visited targets
 # keep a set of what we've vistited 
 POSSIBLE_MOVES = [(-1,0),(1,0),(0,-1),(0,1)]
-def accepts_tuple_arg(func):
-    def wrapper(*args, **kwargs):
-        #args = map(lambda arg: (arg[0],arg[1] if isinstance(arg,tuple) else arg), args)
-        #placeholder while I work on this
-        temp = []
-        for arg in args:
-            if isinstance(arg,tuple):
-                temp += [coord for coord in arg]
-            else:
-                temp.append(arg)
-        return func(*temp, **kwargs)
-    return wrapper
-def add_tuples(a,b):
-    return tuple([sum(x) for x in zip(a,b)])
 
 ##Ignore these functions. They are utilities for printing to console
 def scrollUp(n=1):
@@ -50,7 +39,7 @@ class State:
         self.location = (-1,-1)
         self.targets = []
         self.firstPrint = True
-        self.visited = defaultdict(bool)
+        self.visited = defaultdict(lambda: defaultdict(bool))
         self.finalPath = []
         self.currentPath = []
         self.numExpanded = 0
@@ -58,7 +47,7 @@ class State:
         Each square on the frontier maintains a list of the paths used to reach it
         If the current path is shorter than the stored one, 
         """
-        self.shortestPaths = {}
+        self.shortestPaths = defaultdict(dict)
         self.moveDelay = moveDelay
         textFile = open(filepath)
         lines = textFile.readlines()
@@ -66,13 +55,35 @@ class State:
             j = line.find('P')
             if j != -1:
                 self.location = (j, i)
-                self.shortestPaths[self.location] = [(j,i)]
                 self.currentPath = [(j,i)]
             line = list(line)
             self.map.append(line)
             self.targets.extend([(j,i) for j, val in enumerate(line) if val == '.'])
-        self.move(self.location)
+        self.shortestPaths[self.location] = {tuple(sorted(self.targets)):Path(None,self.location)}
+        self.move(self.location, self.targets)
+    @accepts_tuple_arg
+    def getShortestPath(self, x, y, targets):
+        return self.shortestPaths[(x,y)][tuple(sorted(targets))]
+    @accepts_tuple_arg
+    def updateShortestPath(self, x, y, targets, newPath):
+        targets = list(targets)
+        try: 
+            targets.remove((x,y))
+        except ValueError:
+            pass
+        key = tuple(sorted(targets))
+        try:
+            curr = self.shortestPaths[(x,y)][key]
+            if len(newPath) >= len(curr):
+                return
+            else:
+                self.shortestPaths[(x,y)][key].updatePath(newPath)
+                return
+        except KeyError:
+            pass
 
+        self.shortestPaths[(x,y)][tuple(sorted(targets))] = newPath
+            
     def __str__(self):
         for key, value in self.shortestPaths.items():
             self.setCoord(key, len(value)%10)
@@ -113,35 +124,32 @@ class State:
         elif len(args) == 0:
             moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         #notYetVisited = filter(lambda loc: self.visited[loc] != True, moves)                
-        return [coord for coord in moves if not self.isWall(coord)]
+        return [(coord,self.targets) for coord in moves if not self.isWall(coord)]
     @accepts_tuple_arg
-    def move(self, x, y):
-        assert(self.shortestPaths.get((x,y)) != None)
-        self.visited[(x,y)] = True
+    def move(self, x, y, targets):
+        #assert(self.shortestPaths.get((x,y)) != None)
+        targets = list(targets)
+        try: 
+            targets.remove((x,y))
+        except ValueError:
+            pass
+
+        self.targets = targets
+        key = tuple(sorted(targets))
+        
+        self.visited[(x,y)][key] = True
         self.location = (x,y)
-        self.currentPath = self.shortestPaths[(x,y)]
-        self.checkForShorterPaths()
-        self.numExpanded +=1
-        """
-        assert(legalMoves.index((x,y)) != -1)
-        self.location = (x,y)
-        self.visited[(x,y)] = True
-        self.finalPath.append((x,y))
-        """
-        sleep(self.moveDelay)
-        self.printStatus()
-    def checkForShorterPaths(self):
+        self.currentPath = self.shortestPaths[(x,y)][key]
         legalMoves = self.getTransitions()
         for move in legalMoves:
             #If we found a shorter path than the current shortest, swap it out.
-            if self.shortestPaths.get(move) == None or len(self.shortestPaths[move]) > len(self.currentPath):
-                self.shortestPaths[move] = self.currentPath + [self.location]
-
-    def backtrace(self): #unused
-        self.finalPath.pop()
-        self.location = self.finalPath[-1]
-        sleef(self.moveDelay)
+            self.updateShortestPath(move[0], targets, self.currentPath+[self.location])
+        self.numExpanded +=1
+        if (self.moveDelay == 0):
+            return
+        sleep(self.moveDelay)
         self.printStatus()
+
 
 #this class will be used to construct a connected graph from map from text file       
 class Node:
@@ -175,6 +183,5 @@ class Node:
 if __name__ == "__main__":
     m1 = State("easyMaze.txt")
     m1.printStatus()
-    m1.move(23,1)
-    m1.move(23,2)
-    m1.move(22,2)
+    for x in m1.currentPath:
+        print(x)

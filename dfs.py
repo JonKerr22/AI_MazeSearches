@@ -1,62 +1,40 @@
 from collections import defaultdict
 from maze_parser import State
-def union(a, b):
-    """ return the union of two lists """
-    return list(set(a) | set(b))
-"""
-Assumption: Points on the frontier are still unexplored
-Instead of backtracing, the paths should be treated as though they were moved to from the latest point
-eg:
-(1,2) = [a,b,c,d,e]
-(x,y) = [a,b,c,f,g,h]
-----
-(1,2) = [a,b,c,f,g,h,g,f,c,d,e]
-
-
-Unsustainable. This will roughly double the path length
-"""
-#Computes a path from a to b
-def recomputePath(a, b):
-    a_reverse = list(reversed(a))
-    b_reverse = list(reversed(b))
-    shortestPathLen = len(a)+len(b)
-    bestI = 0
-    bestJ = 0
-    for i, x in enumerate(a_reverse):
-        if i > shortestPathLen:
-            break
-        j = -1
-        try:
-            j = b_reverse[:shortestPathLen-i].index(x)
-        except ValueError:
-            continue
-        pathLen = i + j
-        if pathLen < shortestPathLen:
-            shortestPathLen = pathLen
-            bestI = i
-            bestJ = j
-    return a + a_reverse[1:bestI] + b[-bestJ:]
         
 def dfs(state):
-    global minPathLength
+    initialTargets = list(state.targets)
     frontier = []
     frontier += state.getTransitions()
-    finalPath = []
-    while len(state.targets) > 0:
+    while len(frontier) > 0:
         curr = frontier.pop()
-        state.move(curr)
-        try:
-            state.targets.remove(curr)
-
-            for coord in frontier:
-                state.shortestPaths[coord] = recomputePath(state.shortestPaths[coord], state.currentPath)
-        except ValueError:
-            pass
+        position = curr[0]
+        targets = list(curr[1])
+        if (len(targets)==0):
+            continue
+        state.move(position, targets)
         neighbors = state.getTransitions()
-        for neighbor in neighbors:
-            if not state.visited[neighbor] and not neighbor in frontier:
-                frontier.append(neighbor)
+        for neighbor, targets in neighbors:
+            if state.visited[neighbor][tuple(sorted(targets))]:
+                state.updateShortestPath(neighbor,targets,state.currentPath)
+            elif not (neighbor,targets) in frontier:
+                frontier.append((neighbor,targets))
+    #For all the final states, find the one with the shortest path
+    finalPath = None
+    finalPosition = (-1,-1)
+    finalPathLen = -1
+    for target in initialTargets:
+        try:
+            path = state.shortestPaths[target][()]
+            if finalPathLen == -1 or len(path) < finalPathLen:
+                finalPathLen = len(path)
+                finalPath = path
+                finalPosition = target
+        except KeyError:
+            pass
+    state.currentPath = finalPath
+    state.location = finalPosition
+    state.printStatus()
 if __name__ == "__main__":
-    m1 = State("smallSearch.txt",.1)
+    m1 = State("tinySearch.txt",0)
     dfs(m1)
 

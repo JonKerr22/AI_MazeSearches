@@ -1,6 +1,6 @@
 from maze_parser import State
 
-def greedy(state):
+def aStar(state):
     frontier = []
     
     while (len(state.targets) > 0):

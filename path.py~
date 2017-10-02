@@ -1,0 +1,30 @@
+class Path:
+    def __init__(self, prev, x, y):
+        self.length = len(prev) + 1 if prev != None else 0
+        self.dependents = []
+        self.prev = prev
+        self.coord = (x,y)
+        
+    def __len__(self):
+        return self.length
+    def __iter__(self):
+        return _PathIterator(self)
+    
+    def updateLength(self, other):
+        if other.length >= self.prev.length:
+            return
+        self.prev = other
+        self.length = len(other) + 1
+        map(lambda x: x.updateLength(self), self.dependents)
+class _PathIterator:
+    def __init__(self, path):
+        self._curNode = path
+    def next(self):
+        return self.__next__();
+    def __next__(self):
+        if self._curNode == None:
+            raise StopIteration
+        else: 
+            item = self._curNode
+            self._curNode = self._curNode.prev
+            return item
