@@ -94,11 +94,8 @@ class State:
         if self.firstPrint:
             self.firstPrint = False
         else:
-            scrollUp(maze_height+4)
-        sys.stdout.write(self.colorize() + 
-                         "\nCurrent Location: " + str(self.location) + 
-                         "\nTarget Locations: " +str(self.targets) + 
-                         "\nValid moves: " + str(self.getTransitions()) + "\n")
+            scrollUp(maze_height)
+        sys.stdout.write(self.colorize())
         sys.stdout.flush()
     @accepts_tuple_arg
     def getCoord(self, x, y):
