@@ -34,6 +34,6 @@ def bfs(state):
     state.location = finalPosition
     state.printStatus()
 if __name__ == "__main__":
-    m1 = State("mediumMaze.txt",.01)
+    m1 = State("tinySearch.txt",.01)
 
     bfs(m1)
