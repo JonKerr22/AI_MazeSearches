@@ -94,7 +94,7 @@ class State:
         if self.firstPrint:
             self.firstPrint = False
         else:
-            scrollUp(maze_height+3)
+            scrollUp(maze_height+4)
         sys.stdout.write(self.colorize() + 
                          "\nCurrent Location: " + str(self.location) + 
                          "\nTarget Locations: " +str(self.targets) + 
@@ -122,12 +122,7 @@ class State:
         self.visited[(x,y)] = True
         self.location = (x,y)
         self.currentPath = self.shortestPaths[(x,y)]
-        legalMoves = self.getTransitions()
-        for move in legalMoves:
-            #If we found a shorter path than the current shortest, swap it out.
-            if self.shortestPaths.get(move) == None or len(self.shortestPaths[move]) > len(self.currentPath):
-                self.shortestPaths[move] = self.currentPath + [(x,y)]
-                
+        self.checkForShorterPaths()
         """
         assert(legalMoves.index((x,y)) != -1)
         self.location = (x,y)
@@ -136,6 +131,13 @@ class State:
         """
         sleep(self.moveDelay)
         self.printStatus()
+    def checkForShorterPaths(self):
+        legalMoves = self.getTransitions()
+        for move in legalMoves:
+            #If we found a shorter path than the current shortest, swap it out.
+            if self.shortestPaths.get(move) == None or len(self.shortestPaths[move]) > len(self.currentPath):
+                self.shortestPaths[move] = self.currentPath + [self.location]
+
     def backtrace(self): #unused
         self.finalPath.pop()
         self.location = self.finalPath[-1]
