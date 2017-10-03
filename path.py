@@ -21,16 +21,24 @@ class Path:
             curr = Path(prev, coord)
             prev = curr
         return prev
-    
+    def __str__(self):
+        l = []
+        for coord in self:
+            l += coord
+        l.reverse()
+        return str(list(l)[2:])
     def updatePath(self, other):
-        if other != self.prev:
+        if self.prev != None and other.coord != self.prev.coord:
             if other.length >= self.prev.length:
                 return
-            self.prev = other
+            self.prev = other.prev
+            self.coord = other.coord
             other.dependents.add(self)
         self.length = len(other) + 1
         for dep in self.dependents:
             dep.updatePath(self)
+
+
 class _PathIterator:
     def __init__(self, path):
         self._curNode = path
@@ -45,17 +53,18 @@ class _PathIterator:
             return item.coord
 
 if __name__ == "__main__":
-    a = Path(None, 1, 0)
-    b = Path(a, 2, 0)
-    c = Path(b, 3, 0)
-    d = Path(c, 4, 0)
-    e = Path(d, 5, 0)
-    print(len(e))
-    print(c.dependents)
-    c.updatePath(a)
-    print(len(e))
-    f = e+[(6,0)]
-    for x in f:
-        print(x)
+    a = Path(None, 2, 1)
+    b = Path(a, 1, 1)
+    c = Path(b, 1, 2)
+    d = Path(c, 1, 3)
+    e = Path(d, 2, 3)
+    f = Path(e, 3, 3)
+
+    g = Path(a, 2, 2)
+    print("E:" + str(e))
+    print("F:" + str(f))
+    print("G:" + str(g))
+    e.updatePath(g)
+    print(f)
 
     

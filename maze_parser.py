@@ -35,20 +35,17 @@ def scrollDown(n=1):
         sys.stdout.flush()
 class State:
     def __init__(self, filepath, moveDelay = .5):
+        self.firstPrint = True #Utility
+        self.moveDelay = moveDelay
+        self.numExpanded = 0
+
         self.map = []
         self.location = (-1,-1)
         self.targets = []
-        self.firstPrint = True
         self.visited = defaultdict(lambda: defaultdict(bool))
-        self.finalPath = []
         self.currentPath = []
-        self.numExpanded = 0
-        """
-        Each square on the frontier maintains a list of the paths used to reach it
-        If the current path is shorter than the stored one, 
-        """
         self.shortestPaths = defaultdict(dict)
-        self.moveDelay = moveDelay
+
         textFile = open(filepath)
         lines = textFile.readlines()
         for i, line in enumerate(lines):
@@ -77,52 +74,22 @@ class State:
             if len(newPath) >= len(curr):
                 return
             else:
+                print("\n\n\n\nNew Path")
+                print(newPath)
+                print(curr)
+                print(self.shortestPaths[(x,y)][key].coord)
+                raw_input()
                 self.shortestPaths[(x,y)][key].updatePath(newPath)
+                print(self.shortestPaths[(x,y)][key])
+                raw_input()
                 return
         except KeyError:
             pass
 
         self.shortestPaths[(x,y)][tuple(sorted(targets))] = newPath
             
-    def __str__(self):
-        for key, value in self.shortestPaths.items():
-            self.setCoord(key, len(value)%10)
-        for key, value in self.visited.items():
-            if value:
-                self.setCoord(key, 'v')
-        for coord in self.currentPath:
-            self.setCoord(coord, '.')
-        self.setCoord(self.location, 'P')
-        return ''.join([''.join(row) for row in self.map])
-    def colorize(self):
-        string = str(self)
-        string = string.replace('%', utils.lightGrayBG('%'))
-        string = string.replace('.', utils.greenText('.'))
-        string = string.replace('P', utils.cyanText('P'))
-        string = string.replace('v', utils.darkGrayBG('v'))
-        return string
-    def printStatus(self):
-        maze_height = len(self.map)
-        if self.firstPrint:
-            self.firstPrint = False
-        else:
-            scrollUp(maze_height+2)
-        sys.stdout.write(self.colorize()+"Nodes expanded: "+str(self.numExpanded) + "\nPath Length: "+str(len(self.currentPath))+"\n")
-        sys.stdout.flush()
-    @accepts_tuple_arg
-    def getCoord(self, x, y):
-        return self.map[y][x]
-    @accepts_tuple_arg
-    def setCoord(self, x, y, val):
-        self.map[y][x] = str(val)
-    @accepts_tuple_arg    
-    def isWall(self, x, y):
-        return self.getCoord(x,y) == '%'
     def getTransitions(self, *args):
-        if len(args) == 2:
-            moves = [add_tuples((x,y), move) for move in POSSIBLE_MOVES]
-        elif len(args) == 0:
-            moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
+        moves = [add_tuples(self.location, move) for move in POSSIBLE_MOVES]
         #notYetVisited = filter(lambda loc: self.visited[loc] != True, moves)                
         return [(coord,self.targets) for coord in moves if not self.isWall(coord)]
     @accepts_tuple_arg
@@ -150,35 +117,48 @@ class State:
         sleep(self.moveDelay)
         self.printStatus()
 
+###########################
+############ UTILITIES ####
+###########################
 
-#this class will be used to construct a connected graph from map from text file       
-class Node:
-    def __init__(self, coordinates, state):
-        self.x, self.y = coordinates
-        self.visited = False
-        self.neighbors = state.getTransitions(x, y)
-        self.isTarget = state.getCoord(x,y) == '.'
 
-    #just orders lowest to highest x values, 
-    #this is definitely a bad hueristic, 
-    #just a placeholder for now	    
-    def reorderTargets(self):
-    	if len(self.targets) > 1:
-    		self.targets.sort()
-    def currentMDistance(self):
-    	return abs(self.location[0] - self.targets[0][0]) + abs(self.location[1] - self.targets[0][1])
-    def allMDistnaces(self):
-        distances = []
-        for i in range(len(self.targets)):
-            distances.append(abs(self.location[0] - self.targets[i][0]) + abs(self.location[1] - self.targets[i][1]))
-        return distances
-    #simple list of tuples for visited, we might need to change format for larger mazes
-    def markVisited(self):
-    	self.visited[self.location] = True
-    def visitCheck(self):
-    	return self.visited == True
-    def visitedSpots(self):
-    	return self.visited
+
+    def __str__(self):
+        for key, value in self.shortestPaths.items():
+            self.setCoord(key, len(value)%10)
+        for key, value in self.visited.items():
+            if value:
+                self.setCoord(key, 'v')
+        for coord in self.currentPath:
+            self.setCoord(coord, len(self.currentPath)%10)
+        self.setCoord(self.location, 'P')
+        return ''.join([''.join(row) for row in self.map])
+    def colorize(self):
+        string = str(self)
+        string = string.replace('%', utils.lightGrayBG('%'))
+        string = string.replace('.', utils.greenText('.'))
+        string = string.replace('P', utils.cyanText('P'))
+        string = string.replace('v', utils.darkGrayBG('v'))
+        return string
+    def printStatus(self):
+        maze_height = len(self.map)
+        if self.firstPrint:
+            self.firstPrint = False
+        else:
+            scrollUp(maze_height+3)
+        sys.stdout.write(self.colorize()+"Current Position: " + str(self.location)+ "\nNodes expanded: "+str(self.numExpanded) + "\nPath Length: "+str(len(self.currentPath))+"\n")
+        sys.stdout.flush()
+    @accepts_tuple_arg
+    def getCoord(self, x, y):
+        return self.map[y][x]
+    @accepts_tuple_arg
+    def setCoord(self, x, y, val):
+        self.map[y][x] = str(val)
+    @accepts_tuple_arg    
+    def isWall(self, x, y):
+        return self.getCoord(x,y) == '%'
+
+
 
 if __name__ == "__main__":
     m1 = State("easyMaze.txt")
