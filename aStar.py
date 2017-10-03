@@ -46,14 +46,43 @@ def aStar(state):
                 state.targets.remove(curr)
             except ValueError:
                 pass
-   """     
+   """
+
+remainingDistance = {}
+def computeFarthestPoints(targets):
+    global remainingDistance
+    key = tuple(sorted(targets))
+    try:
+        return remainingDistance[key]
+    except KeyError:
+        val = max([manhattan(pos, tar) for pos in targets for tar in targets])
+        remainingDistance[key] = val
+        return val
+            
 def heuristic(position, targets):
+    #distance from position to closest target
     distance = min([manhattan(position, target) for target in targets])
-    return distance
+    #distance to compute remaining targets
+    return distance + computeFarthestPoints(targets)
 def MDistance(state, goalX, goalY):
     return (abs(state[0]-goalX)+abs(state[1]-goalY))
     
 if __name__ == "__main__":
-    m1 = State("bigMaze.txt",.01)
+    m1 = State("tinySearch.txt",0)
+    targets = list(m1.targets)
     aStar(m1)
-    
+    finalPath = None
+    finalPosition = (-1,-1)
+    finalPathLen = -1
+    for target in targets: 
+        try: 
+            path = m1.shortestPaths[target][()] 
+            if finalPathLen == -1 or len(path) < finalPathLen: 
+                finalPathLen = len(path) 
+                finalPath = path 
+                finalPosition = target 
+        except KeyError: 
+            pass 
+    m1.currentPath = finalPath 
+    m1.location = finalPosition 
+    m1.printStatus()

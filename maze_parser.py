@@ -154,7 +154,7 @@ class State:
 
 
 if __name__ == "__main__":
-    m1 = State("easyMaze.txt")
+    m1 = State("tinySearch.txt")
     m1.printStatus()
     for x in m1.currentPath:
         print(x)
