@@ -74,14 +74,7 @@ class State:
             if len(newPath) >= len(curr):
                 return
             else:
-                print("\n\n\n\nNew Path")
-                print(newPath)
-                print(curr)
-                print(self.shortestPaths[(x,y)][key].coord)
-                raw_input()
                 self.shortestPaths[(x,y)][key].updatePath(newPath)
-                print(self.shortestPaths[(x,y)][key])
-                raw_input()
                 return
         except KeyError:
             pass
@@ -130,7 +123,7 @@ class State:
             if value:
                 self.setCoord(key, 'v')
         for coord in self.currentPath:
-            self.setCoord(coord, len(self.currentPath)%10)
+            self.setCoord(coord, '.')
         self.setCoord(self.location, 'P')
         return ''.join([''.join(row) for row in self.map])
     def colorize(self):

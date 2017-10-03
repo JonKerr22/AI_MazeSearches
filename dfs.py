@@ -13,20 +13,13 @@ def dfs(state):
         if (len(targets)==0):
             continue
         state.move(position, targets)
-        for key, path in state.shortestPaths.items():
-            for k, p in path.items():
-                print("Key {0} Path {1}".format(key, p))
         neighbors = state.getTransitions()
-        print("Current path")
-        print(state.currentPath)
         for neighbor, targets in neighbors:
             if state.visited[neighbor][tuple(sorted(targets))]:
                 #state.updateShortestPath(neighbor,targets,state.currentPath)
                 pass
             elif not (neighbor,targets) in frontier:
                 frontier.append((neighbor,targets))
-        printFrontier(frontier)
-        raw_input()
     #For all the final states, find the one with the shortest path
     finalPath = None
     finalPosition = (-1,-1)
@@ -44,6 +37,6 @@ def dfs(state):
     state.location = finalPosition
     state.printStatus()
 if __name__ == "__main__":
-    m1 = State("testSearch.txt",.1)
+    m1 = State("tinySearch.txt",0)
     dfs(m1)
 

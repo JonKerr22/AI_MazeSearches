@@ -2,6 +2,8 @@ from utils import accepts_tuple_arg
 from time import sleep
 from sets import Set
 class Path:
+
+
     @accepts_tuple_arg
     def __init__(self, prev, x, y):
         self.length = len(prev) + 1 if prev != None else 0
@@ -35,8 +37,8 @@ class Path:
             self.coord = other.coord
             other.dependents.add(self)
         self.length = len(other) + 1
-        for dep in self.dependents:
-            dep.updatePath(self)
+        #for dep in self.dependents:
+        #    return dep.updatePath(self)
 
 
 class _PathIterator:
