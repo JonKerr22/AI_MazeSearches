@@ -11,7 +11,7 @@ def greedy(state):
         currTarget = state.targets.pop()
         while (state.location != currTarget):
 
-\            neighbors = state.getTransitions()
+            neighbors = state.getTransitions()
             for neighbor in neighbors:
                 if not state.visited[neighbor] and not neighbor in frontier:
                     frontier.append(neighbor)
