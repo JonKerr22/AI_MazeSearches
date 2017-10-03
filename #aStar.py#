@@ -46,9 +46,12 @@ def aStar(state):
                 state.targets.remove(curr)
             except ValueError:
                 pass
-   """     
+   """
+     
 def heuristic(position, targets):
+    #distance from position to closest target
     distance = min([manhattan(position, target) for target in targets])
+    
     return distance
 def MDistance(state, goalX, goalY):
     return (abs(state[0]-goalX)+abs(state[1]-goalY))

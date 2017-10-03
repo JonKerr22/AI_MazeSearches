@@ -21,7 +21,7 @@ def aStar(state):
                 return
             if state.costs[neighbor][tuple(sorted(targets))] > cost+1:
                 state.costs[neighbor][tuple(sorted(targets))] = cost+1
-                priority = cost+heuristic(position, targets)
+                priority = cost+heuristic(position, targets)*1.3
                 frontier.put((priority,(neighbor,targets)))
             
 """    
