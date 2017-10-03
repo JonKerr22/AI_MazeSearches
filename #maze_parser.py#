@@ -133,6 +133,8 @@ class State:
         string = string.replace('P', utils.cyanText('P'))
         string = string.replace('v', utils.darkGrayBG('v'))
         return string
+    def printDistances(self):
+        
     def printStatus(self):
         maze_height = len(self.map)
         if self.firstPrint:
