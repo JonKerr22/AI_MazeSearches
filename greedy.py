@@ -31,5 +31,6 @@ def MDistance(state, goalX, goalY):
     return (abs(state[0]-goalX)+abs(state[1]-goalY))
     
 if __name__ == "__main__":
-	m1 = State("smallSearch.txt", .1)
-	greedy(m1)
+    m1 = State("mediumMaze.txt", 0)
+    greedy(m1)
+    m1.printStatus()
